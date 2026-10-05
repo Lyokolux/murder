@@ -115,7 +115,7 @@ fn main() {
     let Some(arg) = args.first() else {
         println!("usage:");
         println!("murder 123    # kill by pid");
-        println!("murder ruby   # kill by process name");
+        println!("murder rust   # kill by process name");
         println!("murder :3000  # kill by port");
         process::exit(1);
     };
