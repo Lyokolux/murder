@@ -4,6 +4,7 @@ use std::process::{self, Command};
 use std::thread::sleep;
 use std::time::Duration;
 
+/// Key-value pair of code to terminate the process and the related seconds to wait accordingly
 const SIGNALS: [(u32, u64); 4] = [(15, 3), (2, 3), (1, 4), (9, 0)];
 
 fn run(cmd: &str, args: &[&str]) -> String {
@@ -24,7 +25,7 @@ fn go_ahead() -> bool {
     if io::stdin().read_line(&mut input).unwrap_or(0) == 0 {
         return false;
     }
-    matches!(input.trim().to_lowercase().as_str(), "y" | "yes" | "yas")
+    matches!(input.trim().to_lowercase().as_str(), "y" | "yes")
 }
 
 fn kill(pid: &str, code: u32) {
@@ -60,8 +61,14 @@ fn contains_word(haystack: &str, needle: &str) -> bool {
             return false;
         }
         let end = start + needle.len();
-        let before_ok = haystack[..start].chars().next_back().is_none_or(|c| !is_word_char(c));
-        let after_ok = haystack[end..].chars().next().is_none_or(|c| !is_word_char(c));
+        let before_ok = haystack[..start]
+            .chars()
+            .next_back()
+            .is_none_or(|c| !is_word_char(c));
+        let after_ok = haystack[end..]
+            .chars()
+            .next()
+            .is_none_or(|c| !is_word_char(c));
         before_ok && after_ok
     })
 }
